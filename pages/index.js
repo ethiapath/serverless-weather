@@ -1,23 +1,29 @@
-import useSwr from 'swr'
 import Link from 'next/link'
+import { useState } from 'react'
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function Index() {
-  const { data, error } = useSwr('/api/users', fetcher)
 
-  if (error) return <div>Failed to load users</div>
-  if (!data) return <div>Loading...</div>
+  const [input, setInput] = useState('');
+
+  const title = `The Weather`
 
   return (
-    <ul>
-      {data.map((user) => (
-        <li key={user.id}>
-          <Link href="/user/[id]" as={`/user/${user.id}`}>
-            <a>{`User ${user.id}`}</a>
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <div className="container">
+      <h1>Welcome to {title}!</h1>
+      <div className="city_input">
+        <input 
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          type="text" placeholder="city"></input>
+
+      <Link href={`/${input}`} >
+        <button>Search</button>
+      </Link>
+
+      </div>
+    </div>
   )
 }
+
